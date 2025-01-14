@@ -1,5 +1,37 @@
-import React from 'react';
+'use client'
+import DefaultLayout from '@/components/Layouts/DefaultLayout';
+import Table from '@/components/Tables/Table';
+import React, { useEffect } from 'react';
+import { DATA } from './constant';
+import { DummyData } from '@/types/DummyData';
+import Breadcrumb from '@/components/Breadcrumbs/Breadcrumb';
+
 
 export const DashboardModule: React.FC = () => {
-  return <div>DashboardModule</div>;
+  const [data, setData] = React.useState<DummyData[]>([]);
+  const refreshTable = async () =>{
+    //! fetch table data
+    try{
+
+    }catch(e){
+      console.error(e);
+    }
+
+    setData(DATA);
+    console.log("refreshTable");
+  }
+  useEffect(() => {
+    refreshTable();
+  })
+
+  return (
+    <div className="dark:bg-boxdark-2 dark:text-bodydark">
+      <DefaultLayout>
+        <Breadcrumb pageName="" />
+        <div className="flex items-center justify-center h-full ">
+          <Table data={data} refreshTable={refreshTable}/>
+        </div>
+      </DefaultLayout>
+    </div>
+  )
 };
