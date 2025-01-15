@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { Poppins } from 'next/font/google';
 import './globals.css';
-import { Toaster } from '@/components/ui/sonner';
+import { Toaster } from '@/components/ui/toaster';
 import { Footer } from '@/components/elements/Footer';
 import { Navbar } from '@/components/elements/Navbar';
 import { Suspense } from 'react';
@@ -51,7 +51,7 @@ export default function RootLayout({
       <body className={`${poppins.className} overflow-x-hidden min-h-screen`}>
         <Suspense>
           <Navbar />
-          <Toaster position="top-center" />
+          <Toaster />
           <main className="w-full min-h-screen bg-white">{children}</main>
           <Footer />
         </Suspense>
