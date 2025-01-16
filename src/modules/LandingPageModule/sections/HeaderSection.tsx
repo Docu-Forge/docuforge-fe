@@ -22,7 +22,9 @@ export const HeaderSection: React.FC = () => {
           seconds. Simplify workflows, ensure accuracy, and save time with
           cutting-edge automation.
         </p>
-        <Button className="mb-10">Try Now!</Button>
+        <Button className="mb-10 px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white text-lg font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
+          Try Now!
+        </Button>
         <div className="w-full relative aspect-video max-w-screen-md p-4 bg-[#6f8af240] rounded-xl">
           <div className="absolute bottom-0 translate-y-[10%] inset-0 w-[600px] h-[450px] rounded-full blur-3xl  bg-gradient-to-r from-[#3B82F650] to-[#93C5FD50] mx-auto"></div>
           <iframe
