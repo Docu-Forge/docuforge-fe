@@ -5,6 +5,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { Footer } from '@/components/elements/Footer';
 import { Navbar } from '@/components/elements/Navbar';
 import { Suspense } from 'react';
+import { AuthContextProvider } from '@/components/context';
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -50,10 +51,12 @@ export default function RootLayout({
       </head>
       <body className={`${poppins.className} overflow-x-hidden min-h-screen`}>
         <Suspense>
-          <Navbar />
-          <Toaster />
-          <main className="w-full min-h-screen bg-white">{children}</main>
-          <Footer />
+          <AuthContextProvider>
+            <Navbar />
+            <Toaster />
+            <main className="w-full min-h-screen bg-white">{children}</main>
+            <Footer />
+          </AuthContextProvider>
         </Suspense>
       </body>
     </html>

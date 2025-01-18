@@ -11,7 +11,6 @@ import {
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { zodResolver } from '@hookform/resolvers/zod';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React from 'react';
@@ -71,18 +70,9 @@ export const RegisterModule: React.FC = () => {
       });
     }
   };
+
   return (
     <>
-      <nav className="w-screen absolute h-16 p-2 flex justify-center bg-white drop-shadow-md">
-        <div className="relative h-full aspect-square">
-          <Image
-            src={'/logo-no-background.png'}
-            fill
-            className="object-contain"
-            alt="Logo"
-          />
-        </div>
-      </nav>
       <div className="flex container mx-auto max-w-screen-md min-h-screen items-start pt-20">
         <div className="py-10 px-6 sm:px-10 w-full">
           <h1 className="text-lg  md:text-xl lg:text-3xl font-semibold mb-6 md:mb-10 text-center">

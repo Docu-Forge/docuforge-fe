@@ -13,8 +13,8 @@ export const FeaturesSection: React.FC = () => {
         </span>
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-4 lg:gap-6 xl:gap-8 relative">
-        {FEATURES_LIST.map((feature) => (
-          <FeatureElement {...feature} />
+        {FEATURES_LIST.map((feature, index) => (
+          <FeatureElement key={index} {...feature} />
         ))}
       </div>
     </section>
