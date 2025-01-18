@@ -17,9 +17,6 @@ export const documentFormSchema = z.object({
   agreements: z
     .array(z.string().min(1, { message: "Agreement cannot be empty" }))
     .min(1, { message: "At least one agreement is required" }),
-  rights: z.array(z.string()).optional(),
-  resolution: z.string().optional(),
-  payment: z.string().optional(),
   closing: z.date({
     required_error: "Closing date is required",
   }),

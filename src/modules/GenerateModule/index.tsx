@@ -9,60 +9,43 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import {
+  Form,
+  FormField,
+  FormItem,
+  FormControl,
+  FormMessage,
+} from "@/components/ui/form";
 import { format } from "date-fns";
 import { CalendarIcon, Plus, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
-import { DocumentFormData, FormErrors } from "./interface";
+import { useForm, useFieldArray } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { documentFormSchema, DocumentFormValues } from "./schema";
 
 export const GenerateModule: React.FC = () => {
   const { toast } = useToast();
-  const [date, setDate] = useState<Date>();
-  const [closingDate, setClosingDate] = useState<Date>();
-  const [errors, setErrors] = useState<FormErrors>({});
-  const [markdown] = useState<string>("");
-  const [formData, setFormData] = useState<DocumentFormData>({
-    title: "",
-    date: "",
-    recipients: [{ name: "", role: "" }],
-    description: "",
-    agreements: [""],
-    rights: [],
-    resolution: "",
-    payment: "",
-    closing: "",
-  });
+  const [isLoading, setIsLoading] = useState(false);
+  const [markdown, setMarkdown] = useState<string>("");
 
-  const validateForm = (): boolean => {
-    const newErrors: FormErrors = {};
-    if (!formData.title) newErrors.title = "Document title is required";
-    if (!date) newErrors.date = "Date is required";
-    if (!formData.recipients.length || !formData.recipients[0].name)
-      newErrors.recipients = "At least one recipient is required";
-    if (!formData.agreements.length || !formData.agreements[0])
-      newErrors.agreements = "At least one agreement is required";
-    if (!closingDate) newErrors.closing = "Closing date is required";
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!validateForm()) return;
-
+  const onSubmit = async (data: DocumentFormValues) => {
     try {
+      setIsLoading(true);
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/generate/legal-document/`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ ...formData, date }),
+          body: JSON.stringify(data),
         }
       );
 
-      if (!response.ok) throw new Error("Failed to send data");
+      const result = await response.json();
+
+      if (!response.ok) throw new Error("Failed to generate document");
+
+      setMarkdown(result.generated_content);
 
       toast({
         title: "Success",
@@ -74,106 +57,138 @@ export const GenerateModule: React.FC = () => {
         description: `${error}`,
         variant: "destructive",
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  // Add recipient handler
-  const addRecipient = () => {
-    setFormData({
-      ...formData,
-      recipients: [...formData.recipients, { name: "", role: "" }],
-    });
-  };
+  const form = useForm<DocumentFormValues>({
+    resolver: zodResolver(documentFormSchema),
+    defaultValues: {
+      title: "Sample Agreement",
+      date: new Date(),
+      recipients: [{ name: "John Doe", role: "Director" }],
+      description: "This is a sample agreement description",
+      agreements: ["First agreement point"],
+      closing: new Date(),
+    },
+  });
 
-  // Remove recipient handler
-  const removeRecipient = (index: number) => {
-    const newRecipients = formData.recipients.filter((_, i) => i !== index);
-    setFormData({ ...formData, recipients: newRecipients });
-  };
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = form;
 
-  // Add list item handler
-  const addListItem = (field: "agreements" | "rights") => {
-    setFormData({
-      ...formData,
-      [field]: [...(formData[field] || []), ""],
-    });
-  };
+  const {
+    fields: recipientFields,
+    append: addRecipient,
+    remove: removeRecipient,
+  } = useFieldArray<DocumentFormValues, "recipients">({
+    control: form.control,
+    name: "recipients",
+  });
 
-  // Remove list item handler
-  const removeListItem = (field: "agreements" | "rights", index: number) => {
-    const newList = formData[field]?.filter((_, i) => i !== index);
-    setFormData({ ...formData, [field]: newList });
-  };
+  const {
+    fields: agreementFields,
+    append: addAgreement,
+    remove: removeAgreement,
+  } = useFieldArray<DocumentFormValues, "agreements">({
+    control: form.control,
+    name: "agreements",
+  });
 
   return (
-    <div className="flex p-6 gap-6">
-      <form onSubmit={handleSubmit} className="">
-        {/* Title Field */}
-        <div className="">
-          <label className="block text-sm font-medium">Document Title</label>
-          <Input
-            value={formData.title}
-            onChange={(e) =>
-              setFormData({ ...formData, title: e.target.value })
-            }
-            className={cn(errors.title && "border-red-500")}
+    <div className="flex p-6 gap-6 pt-[10%]">
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="flex flex-col gap-4 w-1/2"
+        >
+          {/* Title Field */}
+          <FormField
+            control={control}
+            name="title"
+            render={({ field }) => (
+              <FormItem>
+                <label className="block text-sm font-medium">
+                  Document Title
+                </label>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-          {errors.title && (
-            <p className="text-sm text-red-500">{errors.title}</p>
-          )}
-        </div>
 
-        {/* Date Field */}
-        <div className="space-y-4">
-          <label className="block text-sm font-medium">Date</label>
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                variant="outline"
-                className={cn(
-                  "w-full justify-start text-left font-normal",
-                  !date && "text-muted-foreground",
-                  errors.date && "border-red-500"
-                )}
-              >
-                <CalendarIcon className="mr-2 h-4 w-4" />
-                {date ? format(date, "PPP") : <span>Select date</span>}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0">
-              <Calendar
-                mode="single"
-                selected={date}
-                onSelect={setDate}
-                initialFocus
-              />
-            </PopoverContent>
-          </Popover>
-          {errors.date && <p className="text-sm text-red-500">{errors.date}</p>}
-        </div>
+          {/* Date Field */}
+          <FormField
+            control={control}
+            name="date"
+            render={({ field }) => (
+              <FormItem>
+                <label className="block text-sm font-medium">Date</label>
+                <FormControl>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className={cn(
+                          "w-full justify-start text-left font-normal",
+                          !field.value && "text-muted-foreground"
+                        )}
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {field.value ? (
+                          format(field.value, "PPP")
+                        ) : (
+                          <span>Select date</span>
+                        )}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0">
+                      <Calendar
+                        mode="single"
+                        selected={field.value}
+                        onSelect={field.onChange}
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        {/* Recipients Fields */}
-        <div className="space-y-4">
+          {/* Recipients Fields */}
           <label className="block text-sm font-medium">Recipients</label>
-          {formData.recipients.map((recipient, index) => (
-            <div key={index} className="flex gap-2">
-              <Input
-                placeholder="Name"
-                value={recipient.name}
-                onChange={(e) => {
-                  const newRecipients = [...formData.recipients];
-                  newRecipients[index].name = e.target.value;
-                  setFormData({ ...formData, recipients: newRecipients });
-                }}
+          {recipientFields.map((recipient, index) => (
+            <div key={recipient.id} className="flex gap-2">
+              <FormField
+                control={control}
+                name={`recipients.${index}.name`}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input placeholder="Name" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-              <Input
-                placeholder="Role"
-                value={recipient.role}
-                onChange={(e) => {
-                  const newRecipients = [...formData.recipients];
-                  newRecipients[index].role = e.target.value;
-                  setFormData({ ...formData, recipients: newRecipients });
-                }}
+              <FormField
+                control={control}
+                name={`recipients.${index}.role`}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input placeholder="Role" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
               {index > 0 && (
                 <Button
@@ -187,41 +202,51 @@ export const GenerateModule: React.FC = () => {
               )}
             </div>
           ))}
-          <Button type="button" onClick={addRecipient} className="w-full">
+          <Button
+            type="button"
+            onClick={() => addRecipient({ name: "", role: "" })}
+            className="w-full"
+          >
             <Plus className="mr-2 h-4 w-4" /> Add Recipient
           </Button>
-        </div>
 
-        {/* Description Field */}
-        <div className="space-y-4">
-          <label className="block text-sm font-medium">Description</label>
-          <Textarea
-            value={formData.description}
-            onChange={(e) =>
-              setFormData({ ...formData, description: e.target.value })
-            }
+          {/* Description Field */}
+          <FormField
+            control={control}
+            name="description"
+            render={({ field }) => (
+              <FormItem>
+                <label className="block text-sm font-medium">Description</label>
+                <FormControl>
+                  <Textarea {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-        </div>
 
-        {/* Agreements List */}
-        <div className="space-y-4">
+          {/* Agreements List */}
           <label className="block text-sm font-medium">Agreements</label>
-          {formData.agreements.map((agreement, index) => (
-            <div key={index} className="flex gap-2">
-              <Textarea
-                value={agreement}
-                onChange={(e) => {
-                  const newAgreements = [...formData.agreements];
-                  newAgreements[index] = e.target.value;
-                  setFormData({ ...formData, agreements: newAgreements });
-                }}
+          {agreementFields.map((agreement, index) => (
+            <div key={agreement.id} className="flex gap-2">
+              <FormField
+                control={control}
+                name={`agreements.${index}`}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
               {index > 0 && (
                 <Button
                   type="button"
                   variant="outline"
                   size="icon"
-                  onClick={() => removeListItem("agreements", index)}
+                  onClick={() => removeAgreement(index)}
                 >
                   <Trash2 className="h-4 w-4" />
                 </Button>
@@ -230,60 +255,98 @@ export const GenerateModule: React.FC = () => {
           ))}
           <Button
             type="button"
-            onClick={() => addListItem("agreements")}
+            onClick={() => addAgreement("")}
             className="w-full"
           >
             <Plus className="mr-2 h-4 w-4" /> Add Agreement
           </Button>
-        </div>
 
-        {/* Optional Fields */}
-        {/* Rights, Resolution, Payment with similar pattern */}
+          {/* Closing Date */}
+          <FormField
+            control={control}
+            name="closing"
+            render={({ field }) => (
+              <FormItem>
+                <label className="block text-sm font-medium">
+                  Closing Date
+                </label>
+                <FormControl>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className={cn(
+                          "w-full justify-start text-left font-normal",
+                          !field.value && "text-muted-foreground"
+                        )}
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {field.value ? (
+                          format(field.value, "PPP")
+                        ) : (
+                          <span>Select closing date</span>
+                        )}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0">
+                      <Calendar
+                        mode="single"
+                        selected={field.value}
+                        onSelect={field.onChange}
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        {/* Closing Date */}
-        <div className="space-y-4">
-          <label className="block text-sm font-medium">Closing Date</label>
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                variant="outline"
-                className={cn(
-                  "w-full justify-start text-left font-normal",
-                  !closingDate && "text-muted-foreground"
-                )}
-              >
-                <CalendarIcon className="mr-2 h-4 w-4" />
-                {closingDate ? (
-                  format(closingDate, "PPP")
-                ) : (
-                  <span>Select closing date</span>
-                )}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0">
-              <Calendar
-                mode="single"
-                selected={closingDate}
-                onSelect={setClosingDate}
-                initialFocus
-              />
-            </PopoverContent>
-          </Popover>
-        </div>
-
-        <Button type="submit" className="w-full" onClick={handleSubmit}>
-          Generate Document
-        </Button>
-      </form>
+          <Button type="submit" className="w-full" disabled={isLoading}>
+            {isLoading ? (
+              <>
+                <svg
+                  className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
+                </svg>
+                Generating...
+              </>
+            ) : (
+              "Generate Document"
+            )}
+          </Button>
+        </form>
+      </Form>
 
       {/* Preview Section */}
       <div className="w-full p-6 border rounded-lg hidden lg:block">
         <h2 className="text-lg font-semibold mb-4">Preview</h2>
         <div className="prose max-w-none">
-          {markdown ? (
+          {isLoading ? (
+            <div className="flex items-center justify-center py-10">
+              <p className="text-gray-500">Generating document...</p>
+            </div>
+          ) : markdown ? (
             <div dangerouslySetInnerHTML={{ __html: markdown }} />
           ) : (
-            <p className="text-gray-500">Hasil propmt here</p>
+            <p className="text-gray-500">Generated document will appear here</p>
           )}
         </div>
       </div>
