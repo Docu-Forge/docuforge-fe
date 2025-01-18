@@ -17,6 +17,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
+import { useAuthContext } from '@/components/context';
 
 // Schema validasi menggunakan Zod
 const loginSchema = z.object({
@@ -29,6 +30,7 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 export const LoginModule: React.FC = () => {
   const { toast } = useToast();
   const router = useRouter();
+  const { login } = useAuthContext();
 
   // Menggunakan useForm dengan schema Zod
   const form = useForm<LoginFormValues>({
@@ -41,25 +43,18 @@ export const LoginModule: React.FC = () => {
 
   const onSubmit = async (data: LoginFormValues) => {
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/auth/login/`,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          method: 'POST',
-          body: JSON.stringify(data),
-        },
-      );
-      const responseJson = await response.json();
-      if (responseJson.status !== 200) throw new Error(responseJson.errors);
+      const response = await login(data);
       toast({
         title: 'Login Successful',
         description:
           'Welcome back! You have successfully logged into your account.',
         variant: 'success',
       });
-      router.push('/');
+      if (response.is_superuser) {
+        router.push('/dashboard');
+      } else {
+        router.push('/');
+      }
     } catch (err: any) {
       toast({
         title: 'Login Failed',
@@ -71,16 +66,6 @@ export const LoginModule: React.FC = () => {
 
   return (
     <>
-      <nav className="w-screen absolute h-16 p-2 flex justify-center bg-white drop-shadow-md">
-        <div className="relative h-full aspect-square">
-          <Image
-            src={'/logo-no-background.png'}
-            fill
-            className="object-contain"
-            alt="Logo"
-          />
-        </div>
-      </nav>
       <div className="flex container mx-auto max-w-screen-lg min-h-screen items-start pt-20">
         <div className="w-1/2 hidden sm:flex items-center justify-center">
           <div className="relative w-full aspect-square">
