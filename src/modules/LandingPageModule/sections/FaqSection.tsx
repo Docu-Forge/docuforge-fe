@@ -8,10 +8,10 @@ import React from 'react';
 
 export const FaqSection: React.FC = () => {
   return (
-    <section className="container relative mx-auto max-w-screen-xl mb-20">
-      <h2 className="font-bold text-4xl mt-6 mb-10 text-center text-[#161d33] relative">
+    <section className="container px-4 relative mx-auto max-w-screen-xl mb-20">
+      <h2 className="font-bold text-xl sm:text-2xl lg:text-3xl xl:text-4xl mt-6 mb-10 text-center text-[#161d33] relative">
         Frequently Asked Question About{' '}
-        <span className="bg-gradient-to-r from-[#3B82F6] to-[#8B5CF6] bg-clip-text text-transparent font-bold text-4xl">
+        <span className="bg-gradient-to-r from-[#3B82F6] to-[#8B5CF6] bg-clip-text text-transparent font-bold ">
           DocuForge
         </span>
       </h2>

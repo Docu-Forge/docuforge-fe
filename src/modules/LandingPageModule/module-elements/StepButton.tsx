@@ -11,23 +11,23 @@ export const StepButton: React.FC<StepButtonProps> = ({
   return (
     <button
       onClick={() => setSelectedStep(step)}
-      className={`rounded-2xl bg-white h-1/3 text-start overflow-hidden  relative  transition-all hover:scale-[1.02] `}
+      className={`rounded-2xl  bg-white lg:h-1/3 text-start overflow-hidden  relative  transition-all hover:scale-[1.02] `}
     >
       <div
         className={`absolute transition-all bg-gradient-to-br from-[#4E87CB] to-[#2F1FE5] w-full h-full top-0 left-0 ${
           isSelected ? 'opacity-100' : 'opacity-0'
         }`}
       />
-      <div className="flex w-full h-full items-start flex-col p-3 relative">
+      <div className="flex w-full h-full items-start flex-col p-3 pb-6 relative">
         <h3
-          className={`font-bold text-2xl mb-3 ${
+          className={`font-bold text-base lg:text-xl mb-1 2xl:mb-3 ${
             isSelected ? 'text-white' : 'text-[#161d33]'
           } transition-all`}
         >
           {title}
         </h3>
         <p
-          className={`text-sm font-medium ${
+          className={`text-xs lg:text-sm font-medium ${
             isSelected ? 'text-blue-200' : 'text-[#2b3056]'
           } transition-all`}
         >
