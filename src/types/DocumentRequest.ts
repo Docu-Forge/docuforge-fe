@@ -1,12 +1,12 @@
 export interface DocumentRequest {
     id:string;
-    documentType: string;
-    documentStatus: string;
-    createdDate: Date;
-    commentsNotes: string;
-    expiredDate: Date;
+    document_type: string;
+    document_status: string;
+    created_date: Date;
+    comments_notes: string;
+    expired_date: Date;
     fullname: string;
-    documentNumber: string;
-    linktoDetails: string;
-    linktoDocument: string;
+    document_number: string;
+    link_to_details: string;
+    link_to_document: string;
 }

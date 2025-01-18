@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import Sidebar from "@/components/Sidebar";
 import Header from "@/components/Header";
 import { USER } from "@/modules/DashboardModule/constant";
+import { Toaster } from "sonner";
 
 export default function DefaultLayout({
   children,
@@ -25,8 +26,9 @@ export default function DefaultLayout({
           {/* <!-- ===== Header End ===== --> */}
           {/* <!-- ===== Main Content Start ===== --> */}
           <main>
-            <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
+            <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10 mb-16">
               {children}
+              <Toaster richColors position="bottom-left"/>
             </div>
           </main>
           {/* <!-- ===== Main Content End ===== --> */}
