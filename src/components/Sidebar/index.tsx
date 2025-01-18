@@ -95,7 +95,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 alt="Logo"
                 className="h-full w-auto"
               />
-              <h1 className="text-2xl text-black font-bold">DocuForge</h1>
+              <h1 className="bg-gradient-to-r from-[#3B82F6] to-[#8B5CF6] bg-clip-text text-transparent font-bold text-2xl">DocuForge</h1>
           </Link>
 
           <button

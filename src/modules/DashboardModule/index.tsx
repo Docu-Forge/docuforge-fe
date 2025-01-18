@@ -3,12 +3,12 @@ import DefaultLayout from '@/components/Layouts/DefaultLayout';
 import Table from '@/components/Tables/Table';
 import React, { useEffect } from 'react';
 import { DATA } from './constant';
-import { DummyData } from '@/types/DummyData';
-import Breadcrumb from '@/components/Breadcrumbs/Breadcrumb';
+// import Breadcrumb from '@/components/Breadcrumbs/Breadcrumb';
+import { DocumentRequest } from '@/types/DocumentRequest';
 
 
 export const DashboardModule: React.FC = () => {
-  const [data, setData] = React.useState<DummyData[]>([]);
+  const [data, setData] = React.useState<DocumentRequest[]>([]);
   const refreshTable = async () =>{
     //! fetch table data
     try{
@@ -27,7 +27,7 @@ export const DashboardModule: React.FC = () => {
   return (
     <div className="dark:bg-boxdark-2 dark:text-bodydark">
       <DefaultLayout>
-        <Breadcrumb pageName="" />
+        {/* <Breadcrumb pageName="" /> */}
         <div className="flex items-center justify-center h-full ">
           <Table data={data} refreshTable={refreshTable}/>
         </div>
