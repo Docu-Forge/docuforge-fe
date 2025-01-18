@@ -2,6 +2,7 @@
 
 import { LogInIcon, UserPenIcon } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 
 export const Navbar: React.FC = () => {
@@ -34,7 +35,7 @@ export const Navbar: React.FC = () => {
       {isScrolledToScreen && (
         <div className="absolute right-0 top-1/2 -translate-y-1/2  w-[400px] h-[400px] rounded-full bg-radial-gradient from-purple-700/50 via-violet-800/10 to-transparent blur-3xl" />
       )}
-      <div className="container mx-auto flex justify-between relative">
+      <div className="container px-4 mx-auto flex justify-between relative">
         <div className="flex items-center gap-4">
           <div className="relative w-10 aspect-square">
             <Image
@@ -44,20 +45,24 @@ export const Navbar: React.FC = () => {
               className="object-contain"
             />
           </div>
-          <span className="bg-gradient-to-r from-[#3B82F6] to-[#8B5CF6] bg-clip-text text-transparent font-bold text-3xl">
+          <span className="bg-gradient-to-r hidden lg:block from-[#3B82F6] to-[#8B5CF6] bg-clip-text text-transparent font-bold text-3xl">
             DocuForge
           </span>
         </div>
 
-        <div className="flex gap-10">
-          <button className="text-[#e0e3f9] gap-2 flex items-center">
-            <span>Register</span>
-            <UserPenIcon />
-          </button>
-          <button className="text-[#e0e3f9] gap-2 flex items-center">
-            <span>Login</span>
-            <LogInIcon />
-          </button>
+        <div className="flex items-center gap-10">
+          <Link href={'/register'} className="hidden sm:block">
+            <button className="text-[#e0e3f9]  gap-2 sm:flex items-center">
+              <span>Register</span>
+              <UserPenIcon />
+            </button>
+          </Link>
+          <Link href={'/login'}>
+            <button className="text-[#e0e3f9] gap-2 flex items-center">
+              <span>Login</span>
+              <LogInIcon />
+            </button>
+          </Link>
         </div>
       </div>
     </nav>
