@@ -17,3 +17,39 @@ body {
     --radius: 0.5rem;
   }
 }
+
+.markdown-preview {
+  @apply text-base leading-7;
+}
+
+.markdown-preview h1 {
+  @apply text-3xl font-bold mt-8 mb-4;
+}
+
+.markdown-preview h2 {
+  @apply text-2xl font-semibold mt-6 mb-3;
+}
+
+.markdown-preview h3 {
+  @apply text-xl font-semibold mt-4 mb-2;
+}
+
+.markdown-preview p {
+  @apply my-4;
+}
+
+.markdown-preview ul {
+  @apply list-disc list-inside my-4;
+}
+
+.markdown-preview ol {
+  @apply list-decimal list-inside my-4;
+}
+
+.markdown-preview li {
+  @apply ml-4;
+}
+
+.markdown-preview blockquote {
+  @apply border-l-4 border-gray-300 pl-4 italic my-4;
+}
