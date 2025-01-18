@@ -4,7 +4,7 @@ import { DEMO_VIDEO_LINK } from '../constant';
 
 export const HeaderSection: React.FC = () => {
   return (
-    <header className="min-h-screen mb-20 w-screen overflow-hidden bg-[#0F172A] overflow-hidden relative">
+    <header className="min-h-screen mb-20 w-screen overflow-hidden bg-[#0F172A] relative">
       {/* Neon Effect */}
       <div className="absolute rounded-full blur-3xl w-[1000px] h-[1000px] bg-radial-gradient from-blue-700/50 via-purple-800/10 to-transparent animate-neon-move" />
       <div className="absolute right-0 rounded-full blur-3xl w-[600px] h-[600px] bg-radial-gradient from-cyan-500/20 via-blue-500/10 to-transparent animate-bounce-neon" />

@@ -5,7 +5,7 @@ import React from 'react';
 export const Footer: React.FC = () => {
   return (
     <footer className="bg-gray-900 text-gray-300 pt-8">
-      <div className="container mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+      <div className="container px-4 mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
         {/* Left Section */}
         <div className="text-center md:text-left">
           <h2 className="text-xl font-semibold text-white">DocuForge</h2>
