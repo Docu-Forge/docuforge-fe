@@ -1,16 +1,28 @@
 'use client';
 
-import { LogInIcon, UserPenIcon } from 'lucide-react';
+import { useAuthContext } from '@/components/context';
+import { deleteCookie } from 'cookies-next';
+import { LogInIcon, LogOutIcon, UserPenIcon } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation'; // Import usePathname
 import React, { useEffect, useState } from 'react';
 
 export const Navbar: React.FC = () => {
   const [isScrolledToScreen, setIsScrolledToScreen] = useState(false);
+  const pathname = usePathname(); // Get current route path
+  const router = useRouter();
+
+  const { isAuthenticated, setIsAuthenticated } = useAuthContext();
+
+  const logout = () => {
+    deleteCookie('token');
+    setIsAuthenticated(false);
+    router.push('/login');
+  };
 
   useEffect(() => {
     const handleScroll = () => {
-      // Check if user scrolled to the bottom of the screen height
       if (window.scrollY >= window.innerHeight) {
         setIsScrolledToScreen(true);
       } else {
@@ -20,11 +32,27 @@ export const Navbar: React.FC = () => {
 
     window.addEventListener('scroll', handleScroll);
 
-    // Cleanup listener when component unmounts
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
+
+  if (pathname === '/login' || pathname === '/register') {
+    return (
+      <nav className="w-screen absolute h-16 p-2 flex justify-center bg-white drop-shadow-md">
+        <Link href={'/'}>
+          <div className="relative h-full aspect-square">
+            <Image
+              src={'/logo-no-background.png'}
+              fill
+              className="object-contain"
+              alt="Logo"
+            />
+          </div>
+        </Link>
+      </nav>
+    );
+  }
 
   return (
     <nav
@@ -50,20 +78,30 @@ export const Navbar: React.FC = () => {
           </span>
         </div>
 
-        <div className="flex items-center gap-10">
-          <Link href={'/register'} className="hidden sm:block">
-            <button className="text-[#e0e3f9]  gap-2 sm:flex items-center">
-              <span>Register</span>
-              <UserPenIcon />
-            </button>
-          </Link>
-          <Link href={'/login'}>
-            <button className="text-[#e0e3f9] gap-2 flex items-center">
-              <span>Login</span>
-              <LogInIcon />
-            </button>
-          </Link>
-        </div>
+        {isAuthenticated ? (
+          <button
+            onClick={logout}
+            className="text-red-500  gap-2 sm:flex items-center"
+          >
+            <span>Logout</span>
+            <LogOutIcon />
+          </button>
+        ) : (
+          <div className="flex items-center gap-10">
+            <Link href={'/register'} className="hidden sm:block">
+              <button className="text-[#e0e3f9]  gap-2 sm:flex items-center">
+                <span>Register</span>
+                <UserPenIcon />
+              </button>
+            </Link>
+            <Link href={'/login'}>
+              <button className="text-[#e0e3f9] gap-2 flex items-center">
+                <span>Login</span>
+                <LogInIcon />
+              </button>
+            </Link>
+          </div>
+        )}
       </div>
     </nav>
   );

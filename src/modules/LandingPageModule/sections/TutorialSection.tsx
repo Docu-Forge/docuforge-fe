@@ -35,6 +35,7 @@ export const TutorialSection: React.FC = () => {
           <div className="flex flex-col sm:flex-row lg:flex-col w-full lg:w-1/2 xl:w-[40%] 2xl:w-1/3 gap-2 sm:gap-4 xl:gap-6">
             {TUTORIAL_STEP.map((step, index) => (
               <StepButton
+                key={index}
                 {...step}
                 isSelected={selectedStep === index + 1}
                 step={index + 1}
