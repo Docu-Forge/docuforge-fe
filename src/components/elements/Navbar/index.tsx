@@ -5,7 +5,7 @@ import { deleteCookie } from 'cookies-next';
 import { LogInIcon, LogOutIcon, UserPenIcon } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation'; // Import usePathname
+import { redirect, usePathname, useRouter } from 'next/navigation'; // Import usePathname
 import React, { useEffect, useState } from 'react';
 
 export const Navbar: React.FC = () => {
@@ -18,7 +18,15 @@ export const Navbar: React.FC = () => {
   const logout = () => {
     deleteCookie('token');
     setIsAuthenticated(false);
-    router.push('/login');
+    router.push('/');
+  };
+
+  const login = async () => {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/auth/code_grant_auth`,
+    );
+    const responseJson = await response.json();
+    window.location.href = responseJson.url;
   };
 
   useEffect(() => {
@@ -94,12 +102,19 @@ export const Navbar: React.FC = () => {
                 <UserPenIcon />
               </button>
             </Link>
-            <Link href={'/login'}>
+            {/* <Link href={'/login'}>
               <button className="text-[#e0e3f9] gap-2 flex items-center">
                 <span>Login</span>
                 <LogInIcon />
               </button>
-            </Link>
+            </Link> */}
+            <button
+              onClick={login}
+              className="text-[#e0e3f9] gap-2 flex items-center"
+            >
+              <span>Login</span>
+              <LogInIcon />
+            </button>
           </div>
         )}
       </div>
