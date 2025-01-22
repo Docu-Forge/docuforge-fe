@@ -23,6 +23,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { documentFormSchema, DocumentFormValues } from "./schema";
+import ReactMarkdown from "react-markdown";
 
 export const GenerateModule: React.FC = () => {
   const { toast } = useToast();
@@ -338,13 +339,15 @@ export const GenerateModule: React.FC = () => {
       {/* Preview Section */}
       <div className="w-full p-6 border rounded-lg hidden lg:block">
         <h2 className="text-lg font-semibold mb-4">Preview</h2>
-        <div className="prose max-w-none">
+        <div className="prose prose-slate max-w-none">
           {isLoading ? (
             <div className="flex items-center justify-center py-10">
               <p className="text-gray-500">Generating document...</p>
             </div>
           ) : markdown ? (
-            <div dangerouslySetInnerHTML={{ __html: markdown }} />
+            <ReactMarkdown className="markdown-preview">
+              {markdown}
+            </ReactMarkdown>
           ) : (
             <p className="text-gray-500">Generated document will appear here</p>
           )}
