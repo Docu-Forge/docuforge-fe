@@ -1,4 +1,5 @@
 import { DashboardModule } from '@/modules/DashboardModule';
+import { User } from '@/types/User';
 import { getCookie } from 'cookies-next';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
@@ -15,11 +16,11 @@ export default async function Dashboard() {
     },
   );
   const responseJson = await response.json();
-
+  const user = responseJson.contents as User;
   // Jika bukan superuser, redirect ke home
   if (!responseJson.contents.is_superuser) {
     redirect('/');
   }
 
-  return <DashboardModule />;
+  return <DashboardModule user={user}/>;
 }

@@ -1,5 +1,7 @@
 export type User = {
-  fullname: string;
-  type: string;
-  profile_picture: string;
-}
+  username: string;
+  email: string;
+  first_name: string;
+  last_name: string;
+  is_superuser: boolean;
+};

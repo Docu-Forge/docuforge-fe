@@ -4,7 +4,7 @@ import React from 'react';
 
 export const Footer: React.FC = () => {
   return (
-    <footer className="bg-gray-900 text-gray-300 pt-8">
+    <footer className="relative bg-gray-900 text-gray-300 pt-8 z-9999">
       <div className="container px-4 mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
         {/* Left Section */}
         <div className="text-center md:text-left">
