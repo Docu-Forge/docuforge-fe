@@ -46,10 +46,10 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
   const getUser = async (token: string) => {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/auth/profile`,
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/userinfo`,
         {
           headers: {
-            Authorization: `Token ${token}`,
+            Authorization: `Bearer ${token}`,
           },
         },
       );
@@ -67,12 +67,11 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
         description: err.message,
         variant: 'destructive',
       });
-      router.push('/login');
     }
   };
 
   useEffect(() => {
-    const token = getCookie('token');
+    const token = getCookie('AT');
     if (token) {
       getUser(token);
     }
