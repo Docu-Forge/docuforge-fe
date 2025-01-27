@@ -167,6 +167,7 @@ export const GenerateModule: React.FC = () => {
     fields: agreementFields,
     append: addAgreement,
     remove: removeAgreement,
+    // @ts-ignore
   } = useFieldArray<DocumentFormValues, "agreements">({
     control: form.control,
     name: "agreements",
