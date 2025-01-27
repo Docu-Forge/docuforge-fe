@@ -1,6 +1,6 @@
 export interface Recipient {
   name: string;
-  role: string;
+  email: string;
 }
 
 export interface DocumentFormData {

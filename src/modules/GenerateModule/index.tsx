@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -23,30 +23,96 @@ import { useToast } from "@/hooks/use-toast";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { documentFormSchema, DocumentFormValues } from "./schema";
-import ReactMarkdown from "react-markdown";
+import DOMPurify from "dompurify";
+import { getCookie } from "cookies-next";
+import Router from "next/router";
+import Link from "next/link";
+
+// Temporary user constant
+const user = {
+  name: "Azzam",
+  email: "m.azzam.azis@gmail.com",
+};
 
 export const GenerateModule: React.FC = () => {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
-  const [markdown, setMarkdown] = useState<string>("");
+  const [htmlContent, setHtmlContent] = useState<string>("");
+  const [DSLink, setDSLink] = useState<string>("");
+
+  const getUser = async (token: string) => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/userinfo`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const responseJson = await response.json();
+      console.log(responseJson);
+
+      if (responseJson.status !== 200) {
+        throw new Error(responseJson.message);
+      }
+    } catch (err: any) {
+      toast({
+        title: "Please login again!",
+        description: err.message,
+        variant: "destructive",
+      });
+    }
+  };
+
+  useEffect(() => {
+    const token = getCookie("AT");
+    if (token) {
+      getUser(token);
+    }
+  }, []);
+
+  // redirect to login if not logged in
+  useEffect(() => {
+    const checkLoggedIn = async () => {
+      const token = await getCookie("AT");
+      if (!token) {
+        Router.push("/login");
+      }
+    };
+
+    checkLoggedIn();
+  }, []);
 
   const onSubmit = async (data: DocumentFormValues) => {
     try {
       setIsLoading(true);
+      const token = await getCookie("AT");
+      if (!token) {
+        throw new Error("Unauthorized");
+      }
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/generate/legal-document/`,
         {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
           body: JSON.stringify(data),
         }
       );
 
       const result = await response.json();
 
-      if (!response.ok) throw new Error("Failed to generate document");
+      if (!response.ok) throw new Error(JSON.stringify(result));
 
-      setMarkdown(result.generated_content);
+      // Sanitize the HTML content
+      const sanitizedContent = DOMPurify.sanitize(result.generated_content)
+        .replace("```html", "")
+        .replace("```", "");
+      setHtmlContent(sanitizedContent);
+      setDSLink(result.envelope_id);
 
       toast({
         title: "Success",
@@ -68,7 +134,7 @@ export const GenerateModule: React.FC = () => {
     defaultValues: {
       title: "Sample Agreement",
       date: new Date(),
-      recipients: [{ name: "John Doe", role: "Director" }],
+      recipients: [{ name: user.name, email: user.email }],
       description: "This is a sample agreement description",
       agreements: ["First agreement point"],
       closing: new Date(),
@@ -181,11 +247,11 @@ export const GenerateModule: React.FC = () => {
               />
               <FormField
                 control={control}
-                name={`recipients.${index}.role`}
+                name={`recipients.${index}.email`}
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
-                      <Input placeholder="Role" {...field} />
+                      <Input placeholder="Email" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -205,7 +271,7 @@ export const GenerateModule: React.FC = () => {
           ))}
           <Button
             type="button"
-            onClick={() => addRecipient({ name: "", role: "" })}
+            onClick={() => addRecipient({ name: "", email: "" })}
             className="w-full"
           >
             <Plus className="mr-2 h-4 w-4" /> Add Recipient
@@ -339,15 +405,24 @@ export const GenerateModule: React.FC = () => {
       {/* Preview Section */}
       <div className="w-full p-6 border rounded-lg hidden lg:block">
         <h2 className="text-lg font-semibold mb-4">Preview</h2>
-        <div className="prose prose-slate max-w-none">
+        <div className="prose prose-slate overflow-clip">
           {isLoading ? (
             <div className="flex items-center justify-center py-10">
               <p className="text-gray-500">Generating document...</p>
             </div>
-          ) : markdown ? (
-            <ReactMarkdown className="markdown-preview">
-              {markdown}
-            </ReactMarkdown>
+          ) : htmlContent ? (
+            <>
+              <div
+                className="document-preview p-2"
+                dangerouslySetInnerHTML={{ __html: htmlContent }}
+              />
+              <Link
+                href={`https://demo.docusign.net/envelopes/${DSLink}`}
+                target="_blank"
+              >
+                Link to open document editor
+              </Link>
+            </>
           ) : (
             <p className="text-gray-500">Generated document will appear here</p>
           )}

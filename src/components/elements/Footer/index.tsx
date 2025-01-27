@@ -1,10 +1,10 @@
-import { Github } from '@/components/icons';
-import { GithubIcon } from 'lucide-react';
-import React from 'react';
+import { Github } from "@/components/icons";
+import { GithubIcon } from "lucide-react";
+import React from "react";
 
 export const Footer: React.FC = () => {
   return (
-    <footer className="relative bg-gray-900 text-gray-300 pt-8 z-9999">
+    <footer className="relative bg-gray-900 text-gray-300 pt-8 z-[999]">
       <div className="container px-4 mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
         {/* Left Section */}
         <div className="text-center md:text-left">
@@ -39,7 +39,7 @@ export const Footer: React.FC = () => {
               fill="fill-gray-300 group-hover:fill-white "
               size="w-5 h-5"
             />
-            <span className="group-hover:text-white">M. Azzam Azis</span>
+            <span className="group-hover:text-white">M. Azzam</span>
           </a>
           <a
             href="https://github.com/nabeel1209"
