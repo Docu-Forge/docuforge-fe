@@ -138,13 +138,20 @@ export const GenerateModule: React.FC = () => {
   const form = useForm<DocumentFormValues>({
     resolver: zodResolver(documentFormSchema),
     defaultValues: {
-      title: "Sample Agreement",
+      title: "Partnership Agreement",
       date: new Date(),
       document_type: "Cooperation Letter",
-      recipients: [{ name: user.name, email: user.email }],
+      recipients: [
+        { name: "Daffa Rafi", email: "daffarafip24@gmail.com" },
+        { name: "M Azzam", email: "m.azzam.azis@gmail.com" },
+      ],
       description: "This is a sample agreement description",
-      agreements: ["First agreement point"],
-      closing: new Date(),
+      agreements: [
+        "Both parties agree to share resources equally.",
+        "All disputes will be resolved through arbitration.",
+        "Confidentiality will be maintained at all times.",
+      ],
+      closing: new Date("2025-02-15"),
     },
   });
 
