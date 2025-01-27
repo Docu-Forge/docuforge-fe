@@ -69,6 +69,7 @@ export const GenerateModule: React.FC = () => {
     const token = getCookie("AT");
     if (token) {
       getUser(token);
+      console.log(token);
     }
   }, []);
 
@@ -417,7 +418,7 @@ export const GenerateModule: React.FC = () => {
                 dangerouslySetInnerHTML={{ __html: htmlContent }}
               />
               <Link
-                href={`https://demo.docusign.net/envelopes/${DSLink}`}
+                href={`https://demo.docusign.net/restapi/envelopes/${DSLink}`}
                 target="_blank"
               >
                 Link to open document editor
