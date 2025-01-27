@@ -95,9 +95,13 @@ export const Navbar: React.FC = () => {
         </div>
         <div className="hidden sm:flex justify-between gap-10 self-center text-white mr-28">
           {/* <Link href={'/'}>Home</Link> */}
-          <Link href={'/generate'}>Generate Document</Link>
-          <Link href={'/dashboard'}>Dashboard</Link>
-          <Link href={'/contact'}>Contact</Link>
+          {isAuthenticated && (
+            <>
+              <Link href={'/generate'}>Generate Document</Link>
+              <Link href={'/dashboard'}>Dashboard</Link>
+              <Link href={'/contact'}>Contact</Link>
+            </>
+          )}
         </div>
         {isAuthenticated ? (
           <button
