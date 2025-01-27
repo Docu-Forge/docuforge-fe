@@ -1,7 +1,16 @@
+export type Account = {
+  account_id: string;
+  is_default: boolean;
+  account_name: string;
+  base_uri: string;
+};
+
 export type User = {
-  username: string;
+  sub: string;
+  name: string;
+  given_name: string;
+  family_name: string;
+  created: string;
   email: string;
-  first_name: string;
-  last_name: string;
-  is_superuser: boolean;
+  accounts: Account[];
 };
