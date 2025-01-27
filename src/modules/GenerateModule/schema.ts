@@ -5,6 +5,10 @@ export const documentFormSchema = z.object({
   date: z.date({
     required_error: "Date is required",
   }),
+  document_type: z.enum(
+    ["Cooperation Letter", "Employment Agreement", "Request/Sales Letter"],
+    { required_error: "Document type is required" }
+  ),
   recipients: z
     .array(
       z.object({
