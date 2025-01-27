@@ -1,10 +1,10 @@
-"use client"
+'use client';
 
-import * as React from "react"
-import { ChevronsUpDown } from "lucide-react"
+import * as React from 'react';
+import { ChevronsUpDown } from 'lucide-react';
 
 // import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
+import { Button } from '@/components/ui/button';
 import {
   Command,
   CommandEmpty,
@@ -12,28 +12,27 @@ import {
   // CommandInput,
   CommandItem,
   CommandList,
-} from "@/components/ui/command"
+} from '@/components/ui/command';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
-import { Badge } from "@/components/ui/badge"
+} from '@/components/ui/popover';
+import { Badge } from '@/components/ui/badge';
 
 const status = [
   {
-    value: "Approved",
-    label: "Approve",
+    value: 'Approved',
+    label: 'Approve',
   },
   {
-    value: "Declined",
-    label: "Decline",
+    value: 'Declined',
+    label: 'Decline',
   },
-  
-]
+];
 
-const postAction = async (action:string, id:string) => {
-  try{
+const postAction = async (action: string, id: string) => {
+  try {
     // const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/action`, {
     //   method: 'POST',
     //   headers: {
@@ -44,16 +43,22 @@ const postAction = async (action:string, id:string) => {
     // if(response.status === 200){
     //   console.log("Action posted successfully");
     // }
-  }catch(e){
+  } catch (e) {
     console.error(e);
   }
-  
-  console.log(action, id);
-}
 
-export function Combobox({ onChangeFunction, id }: { id:string, onChangeFunction: () => Promise<void> }) {
-  const [open, setOpen] = React.useState(false)
-  const [value, setValue] = React.useState("")
+  console.log(action, id);
+};
+
+export function Combobox({
+  onChangeFunction,
+  id,
+}: {
+  id: string;
+  onChangeFunction: () => Promise<void>;
+}) {
+  const [open, setOpen] = React.useState(false);
+  const [value, setValue] = React.useState('');
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -66,7 +71,7 @@ export function Combobox({ onChangeFunction, id }: { id:string, onChangeFunction
         >
           {value
             ? status.find((state) => state.value === value)?.label
-            : "Select Action"}
+            : 'Select Action'}
           <ChevronsUpDown className="ml-1 h-2 w-2 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -81,8 +86,8 @@ export function Combobox({ onChangeFunction, id }: { id:string, onChangeFunction
                   key={state.value}
                   value={state.value}
                   onSelect={async (currentValue) => {
-                    setValue(currentValue === value ? "" : currentValue)
-                    setOpen(false)
+                    setValue(currentValue === value ? '' : currentValue);
+                    setOpen(false);
                     await postAction(currentValue, id);
                     await onChangeFunction();
                   }}
@@ -93,7 +98,23 @@ export function Combobox({ onChangeFunction, id }: { id:string, onChangeFunction
                       value === state.value ? "opacity-100" : "opacity-0"
                     )}
                   /> */}
-                  <Badge variant={state.value as "default" | "secondary" | "active" | "pending" | "inactive" | "Approved" | "destructive" | "outline"}>{state.label}</Badge>
+                  <Badge
+                    variant={
+                      state.value as
+                        | 'default'
+                        | 'secondary'
+                        | 'active'
+                        | 'pending'
+                        | 'inactive'
+                        | 'Completed'
+                        | 'Sent'
+                        | 'Rejected'
+                        | 'destructive'
+                        | 'outline'
+                    }
+                  >
+                    {state.label}
+                  </Badge>
                 </CommandItem>
               ))}
             </CommandGroup>
@@ -101,5 +122,5 @@ export function Combobox({ onChangeFunction, id }: { id:string, onChangeFunction
         </Command>
       </PopoverContent>
     </Popover>
-  )
+  );
 }
