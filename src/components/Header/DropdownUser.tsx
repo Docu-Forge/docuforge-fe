@@ -12,9 +12,9 @@ const DropdownUser = ({ user }: { user: User }) => {
   const {isAuthenticated, setIsAuthenticated} = useAuthContext();
   const router = useRouter();
   const logout = () => {
-    deleteCookie('token');
+    deleteCookie('AT');
     setIsAuthenticated(false);
-    router.push('/login');
+    router.push('/');
   };
   return (
     <ClickOutside onClick={() => setDropdownOpen(false)} className="relative">
@@ -25,16 +25,16 @@ const DropdownUser = ({ user }: { user: User }) => {
       >
         <span className="hidden text-right lg:block">
           <span className="block text-sm font-medium text-black dark:text-white">
-            {user.username}
+            {user.name}
           </span>
-          <span className="block text-xs">{user.is_superuser ? "Admin" : "User"}</span>
+          {/* <span className="block text-xs">{user.is_superuser ? "Admin" : "User"}</span> */}
         </span>
 
         <span className="h-12 w-12 rounded-full overflow-hidden">
           <Image
             width={112}
             height={112}
-            src={user.username.split(" ").length > 1 ? `https://ui-avatars.com/api/?name=${user.username.charAt(0)}+${user.username.split("")[1].charAt(0)}`:`https://ui-avatars.com/api/?name=${user.username.charAt(0)}`}
+            src={user.name.split(" ").length > 1 ? `https://ui-avatars.com/api/?name=${user.name.charAt(0)}+${user.family_name.charAt(0)}`:`https://ui-avatars.com/api/?name=${user.name.charAt(0)}`}
             style={{
               width: "auto",
               height: "auto",
@@ -68,7 +68,7 @@ const DropdownUser = ({ user }: { user: User }) => {
           <ul className="flex flex-col gap-5 border-b border-stroke px-6 py-7.5 dark:border-strokedark">
             <li>
               <Link
-                href="/dashboard/profile"
+                href="/profile"
                 className="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
               >
                 <svg

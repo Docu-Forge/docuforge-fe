@@ -1,3 +1,4 @@
+'use client'
 import React from 'react';
 import {
   FaqSection,
@@ -6,8 +7,18 @@ import {
   TryNowSection,
   TutorialSection,
 } from './sections';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
+import { Button } from '@/components/ui/button';
+import { useRouter } from 'next/navigation';
+
 
 export const LandingPageModule: React.FC = () => {
+  const router = useRouter();
   return (
     <div className="bg-[#f5f5f9]">
       <HeaderSection />
@@ -19,6 +30,17 @@ export const LandingPageModule: React.FC = () => {
         <TutorialSection />
         <FaqSection />
         <TryNowSection />
+        <TooltipProvider>
+          <Tooltip >
+            <TooltipTrigger className='fixed bottom-8 right-8 z-99999'>
+              <Button variant="outline" onClick={()=>router.push("/chatbot")}><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path></svg>Chat</Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Chat with our AI Assistant</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+
       </div>
     </div>
   );
