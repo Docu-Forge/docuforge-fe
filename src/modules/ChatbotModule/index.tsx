@@ -4,19 +4,13 @@ import { ChatBubble, ChatBubbleAvatar, ChatBubbleMessage } from "@/components/ui
 import { ChatInput } from "@/components/ui/chat/chat-input";
 import { ChatMessageList } from "@/components/ui/chat/chat-message-list";
 import { User } from "@/types/User";
-import { set } from "date-fns";
 import { CornerDownLeft } from "lucide-react";
 import { createRef, useState } from "react";
 import chat from "@/lib/OpenAI";
-import { ChatCompletion } from "openai/resources/index.mjs";
 import ReactMarkdown from "react-markdown";
 
-interface ChatbotModuleProps {
-    user: User;
-}
 
-
-export const ChatbotModule = ({ user }:ChatbotModuleProps) => {
+export const ChatbotModule = () => {
     const [input, setInput] = useState('');
     const [messages, setMessages] = useState<{input:string, response:string}[]>([]);
     const chatInputRef = createRef<HTMLTextAreaElement>();
@@ -31,19 +25,12 @@ export const ChatbotModule = ({ user }:ChatbotModuleProps) => {
     }
     return (
         <div className="flex flex-col px-20 h-screen pt-20 pb-6">
-            <h1 className="bg-gradient-to-r hidden lg:block from-[#3B82F6] to-[#8B5CF6] bg-clip-text text-transparent font-bold text-2xl mb-2">AI Chat Assistant</h1>
-            <style>
-                {`
-                    * {
-                        // border: 1px solid red;
-                    }
-                `}
-            </style>
+            <h1 className="bg-gradient-to-r hidden lg:block from-[#3B82F6] to-[#8B5CF6] bg-clip-text text-transparent font-bold text-3xl mb-2 py-2">AI Chat Assistant</h1>
             <ChatMessageList className="flex min-h-[calc(100%-100px)] justify-start max-h-[calc(100%-100px)] border rounded-lg" autoFocus>
                 {messages.map((message, index) => (
                     <ChatMessageList className="h-fit" key={index}>
                         <ChatBubble variant='sent'>
-                            <ChatBubbleAvatar user={user} />
+                            <ChatBubbleAvatar type="sent" />
                             <ChatBubbleMessage variant='sent'>
                                 <ReactMarkdown>
                                     {message.input}
@@ -52,7 +39,7 @@ export const ChatbotModule = ({ user }:ChatbotModuleProps) => {
                         </ChatBubble>
 
                         <ChatBubble variant='received'>
-                            <ChatBubbleAvatar />
+                            <ChatBubbleAvatar type="received"/>
                             {message.response === 'loading' ? (<ChatBubbleMessage isLoading/>) : 
                                 (<ChatBubbleMessage variant='received'>
                                     <ReactMarkdown>
@@ -60,7 +47,6 @@ export const ChatbotModule = ({ user }:ChatbotModuleProps) => {
                                     </ReactMarkdown>
                                 </ChatBubbleMessage>
                             )}
-                            
                         </ChatBubble>
                     </ChatMessageList>
                 ))}

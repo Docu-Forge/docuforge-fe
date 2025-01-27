@@ -18,10 +18,9 @@ export default async function Dashboard() {
   );
   const responseJson = await response.json();
   const user = responseJson.contents as User;
-  console.log(responseJson);
-  // if (!responseJson.contents.is_superuser) {
-  //   redirect('/');
-  // }
+  if (!responseJson.contents) {
+    redirect('/');
+  }
 
   return <DashboardModule user={user}/>;
 }

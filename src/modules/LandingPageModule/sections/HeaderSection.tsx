@@ -1,8 +1,20 @@
 import { Button } from '@/components/ui/button';
 import React from 'react';
 import { DEMO_VIDEO_LINK } from '../constant';
+import { useAuthContext } from '@/components/context';
+import { useRouter } from 'next/navigation';
 
 export const HeaderSection: React.FC = () => {
+  const router = useRouter();
+  const { isAuthenticated } = useAuthContext();
+
+  const login = async () => {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/auth/code_grant_auth`,
+    );
+    const responseJson = await response.json();
+    window.location.href = responseJson.url;
+  };
   return (
     <header className="min-h-screen mb-20 w-screen overflow-hidden bg-[#0F172A] relative">
       {/* Neon Effect */}
@@ -22,7 +34,10 @@ export const HeaderSection: React.FC = () => {
           seconds. Simplify workflows, ensure accuracy, and save time with
           cutting-edge automation.
         </p>
-        <Button className="mb-10 px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white text-lg font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
+        <Button
+          onClick={isAuthenticated ? () => router.push('/generate') : login}
+          className="mb-10 px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white text-lg font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300"
+        >
           Try Now!
         </Button>
         <div className="w-full relative aspect-video max-w-screen-md p-1 sm:p-4 bg-[#6f8af240] rounded-xl">

@@ -12,9 +12,9 @@ const DropdownUser = ({ user }: { user: User }) => {
   const {isAuthenticated, setIsAuthenticated} = useAuthContext();
   const router = useRouter();
   const logout = () => {
-    deleteCookie('token');
+    deleteCookie('AT');
     setIsAuthenticated(false);
-    router.push('/login');
+    router.push('/');
   };
   return (
     <ClickOutside onClick={() => setDropdownOpen(false)} className="relative">
