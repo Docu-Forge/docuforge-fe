@@ -16,7 +16,7 @@ export const Navbar: React.FC = () => {
   const { isAuthenticated, setIsAuthenticated } = useAuthContext();
 
   const logout = () => {
-    deleteCookie('token');
+    deleteCookie('AT');
     setIsAuthenticated(false);
     router.push('/');
   };
@@ -65,14 +65,15 @@ export const Navbar: React.FC = () => {
   return (
     <nav
       className={`fixed z-50 w-full py-4 transition-colors duration-300 overflow-hidden  ${
-        isScrolledToScreen ? 'bg-[#0F172A] shadow-md' : 'bg-transparent'
+        // isScrolledToScreen && pathname=="/" ? 'bg-[#0F172A] shadow-md' : 'bg-transparent'
+        pathname=="/" ? (isScrolledToScreen ? 'bg-[#0F172A] shadow-md': 'bg-transparent') : 'bg-[#0F172A] shadow-md'
       }`}
     >
       {isScrolledToScreen && (
         <div className="absolute right-0 top-1/2 -translate-y-1/2  w-[400px] h-[400px] rounded-full bg-radial-gradient from-purple-700/50 via-violet-800/10 to-transparent blur-3xl" />
       )}
       <div className="container px-4 mx-auto flex justify-between relative">
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 cursor-pointer" onClick={() => router.push('/')}>
           <div className="relative w-10 aspect-square">
             <Image
               src={'/logo-no-background.png'}
@@ -85,11 +86,16 @@ export const Navbar: React.FC = () => {
             DocuForge
           </span>
         </div>
-
+        <div className='hidden sm:flex justify-between gap-10 self-center text-white mr-28'>
+          {/* <Link href={'/'}>Home</Link> */}
+          <Link href={'/generate'}>Generate Document</Link>
+          <Link href={'/dashboard'}>Dashboard</Link>
+          <Link href={'/contact'}>Contact</Link>
+        </div>
         {isAuthenticated ? (
           <button
             onClick={logout}
-            className="text-red-500  gap-2 sm:flex items-center"
+            className="text-red-500 gap-2 sm:flex items-center"
           >
             <span>Logout</span>
             <LogOutIcon />

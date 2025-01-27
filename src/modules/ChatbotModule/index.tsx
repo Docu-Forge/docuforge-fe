@@ -31,7 +31,7 @@ export const ChatbotModule = ({ user }:ChatbotModuleProps) => {
     }
     return (
         <div className="flex flex-col px-20 h-screen pt-20 pb-6">
-            <h1 className="bg-gradient-to-r hidden lg:block from-[#3B82F6] to-[#8B5CF6] bg-clip-text text-transparent font-bold text-2xl mb-2">AI Chat Assistant</h1>
+            <h1 className="bg-gradient-to-r hidden lg:block from-[#3B82F6] to-[#8B5CF6] bg-clip-text text-transparent font-bold text-3xl mb-2 py-2">AI Chat Assistant</h1>
             <style>
                 {`
                     * {
