@@ -18,12 +18,14 @@ const badgeVariants = cva(
           "border-transparent bg-yellow-500 text-white",
         inactive:
           "border-transparent bg-red-500 text-white",
-        Completed:
+        completed:
           "border-transparent bg-green-700 text-white",
-        Sent:
+        sent:
           "border-transparent bg-yellow-600 text-white",
-        Rejected:
+        declined:
           "border-transparent bg-red-700 text-white",
+        delivered:
+          "border-transparent bg-blue-500 text-white",
         destructive:
           "border-transparent bg-red-500 text-neutral-50 hover:bg-red-500/80 dark:bg-red-900 dark:text-neutral-50 dark:hover:bg-red-900/80",
         outline: "text-neutral-950 dark:text-neutral-50",

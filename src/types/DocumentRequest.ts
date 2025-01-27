@@ -1,3 +1,7 @@
+type Recipient = {
+    name: string;
+    status: string;
+}
 export type DocumentRequest = {
     id: string;
     document_title: string;
@@ -7,4 +11,5 @@ export type DocumentRequest = {
     expired_date: Date;
     document_number: string;
     envelope_id: string;
+    recipients: Recipient[];
 }
