@@ -9,7 +9,7 @@ export const documentFormSchema = z.object({
     .array(
       z.object({
         name: z.string().min(1, { message: "Name is required" }),
-        role: z.string().min(1, { message: "Role is required" }),
+        email: z.string().email({ message: "Invalid email address" }),
       })
     )
     .min(1, { message: "At least one recipient is required" }),
