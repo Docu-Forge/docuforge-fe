@@ -99,7 +99,7 @@ export const Navbar: React.FC = () => {
             <>
               <Link href={'/generate'}>Generate Document</Link>
               <Link href={'/dashboard'}>Dashboard</Link>
-              <Link href={'/contact'}>Contact</Link>
+              {/* <Link href={'/contact'}>Contact</Link> */}
             </>
           )}
         </div>
