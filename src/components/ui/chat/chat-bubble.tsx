@@ -56,16 +56,16 @@ ChatBubble.displayName = "ChatBubble";
 
 // ChatBubbleAvatar
 interface ChatBubbleAvatarProps {
-  user?: User;
+  type:string;
 }
 
-const ChatBubbleAvatar: React.FC<ChatBubbleAvatarProps> = ({ user }) => (
+const ChatBubbleAvatar: React.FC<ChatBubbleAvatarProps> = ({ type }) => (
   <div className="w-8 h-8 relative rounded-full overflow-hidden">
-   {user ? ( 
+   {type == "sent" ? ( 
      <Image
       width={112}
       height={112}
-      src={user.name.split(" ").length > 1 ? `https://ui-avatars.com/api/?name=${user.name.charAt(0)}+${user.family_name.charAt(0)}`:`https://ui-avatars.com/api/?name=${user.name.charAt(0)}`}
+      src="https://ui-avatars.com/api/?name=U+"
       style={{
         width: "auto",
         height: "auto",
@@ -76,7 +76,7 @@ const ChatBubbleAvatar: React.FC<ChatBubbleAvatarProps> = ({ user }) => (
       <Image
       width={112}
       height={112}
-      src={`https://ui-avatars.com/api/?name=A+I`}
+      src="https://ui-avatars.com/api/?name=A+I"
       style={{
         width: "auto",
         height: "auto",
