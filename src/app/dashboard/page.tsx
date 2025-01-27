@@ -5,22 +5,23 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
 export default async function Dashboard() {
-  const token = getCookie('token', { cookies });
+  const token = getCookie('AT', { cookies });
 
+  // Jika bukan superuser, redirect ke home  
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/auth/profile`,
+    `${process.env.NEXT_PUBLIC_API_URL}/auth/userinfo`,
     {
       headers: {
-        Authorization: `Token ${token}`,
+        Authorization: `Bearer ${token}`,
       },
     },
   );
   const responseJson = await response.json();
   const user = responseJson.contents as User;
-  // Jika bukan superuser, redirect ke home
-  if (!responseJson.contents.is_superuser) {
-    redirect('/');
-  }
+  console.log(responseJson);
+  // if (!responseJson.contents.is_superuser) {
+  //   redirect('/');
+  // }
 
   return <DashboardModule user={user}/>;
 }
