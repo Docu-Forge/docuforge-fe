@@ -66,14 +66,21 @@ export const Navbar: React.FC = () => {
     <nav
       className={`fixed z-50 w-full py-4 transition-colors duration-300 overflow-hidden  ${
         // isScrolledToScreen && pathname=="/" ? 'bg-[#0F172A] shadow-md' : 'bg-transparent'
-        pathname=="/" ? (isScrolledToScreen ? 'bg-[#0F172A] shadow-md': 'bg-transparent') : 'bg-[#0F172A] shadow-md'
+        pathname == '/'
+          ? isScrolledToScreen
+            ? 'bg-[#0F172A] shadow-md'
+            : 'bg-transparent'
+          : 'bg-[#0F172A] shadow-md'
       }`}
     >
       {isScrolledToScreen && (
         <div className="absolute right-0 top-1/2 -translate-y-1/2  w-[400px] h-[400px] rounded-full bg-radial-gradient from-purple-700/50 via-violet-800/10 to-transparent blur-3xl" />
       )}
       <div className="container px-4 mx-auto flex justify-between relative">
-        <div className="flex items-center gap-4 cursor-pointer" onClick={() => router.push('/')}>
+        <div
+          className="flex items-center gap-4 cursor-pointer"
+          onClick={() => router.push('/')}
+        >
           <div className="relative w-10 aspect-square">
             <Image
               src={'/logo-no-background.png'}
@@ -86,7 +93,7 @@ export const Navbar: React.FC = () => {
             DocuForge
           </span>
         </div>
-        <div className='hidden sm:flex justify-between gap-10 self-center text-white mr-28'>
+        <div className="hidden sm:flex justify-between gap-10 self-center text-white mr-28">
           {/* <Link href={'/'}>Home</Link> */}
           <Link href={'/generate'}>Generate Document</Link>
           <Link href={'/dashboard'}>Dashboard</Link>
@@ -102,12 +109,12 @@ export const Navbar: React.FC = () => {
           </button>
         ) : (
           <div className="flex items-center gap-10">
-            <Link href={'/register'} className="hidden sm:block">
+            {/* <Link href={'/register'} className="hidden sm:block">
               <button className="text-[#e0e3f9]  gap-2 sm:flex items-center">
                 <span>Register</span>
                 <UserPenIcon />
               </button>
-            </Link>
+            </Link> */}
             {/* <Link href={'/login'}>
               <button className="text-[#e0e3f9] gap-2 flex items-center">
                 <span>Login</span>
