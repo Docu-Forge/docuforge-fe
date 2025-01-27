@@ -26,7 +26,7 @@ export const TutorialSection: React.FC = () => {
         <div className="flex flex-col lg:flex-row w-full gap-4 xl:gap-8 relative">
           <div className="relative w-full lg:w-1/2 xl:w-[60%] 2xl:w-2/3 aspect-video rounded-2xl overflow-hidden">
             <Image
-              src={TUTORIAL_STEP[selectedStep - 1].imageLink}
+              src={`/${TUTORIAL_STEP[selectedStep - 1].imageLink}.png`}
               alt={TUTORIAL_STEP[selectedStep - 1].title}
               fill
               className="object-cover"
