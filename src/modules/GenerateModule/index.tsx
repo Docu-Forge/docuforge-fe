@@ -1,44 +1,44 @@
-'use client';
-import React, { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Calendar } from '@/components/ui/calendar';
+"use client";
+import React, { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/components/ui/popover';
+} from "@/components/ui/popover";
 import {
   Form,
   FormField,
   FormItem,
   FormControl,
   FormMessage,
-} from '@/components/ui/form';
-import { format } from 'date-fns';
-import { CalendarIcon, Plus, Trash2 } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { useToast } from '@/hooks/use-toast';
-import { useForm, useFieldArray } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { documentFormSchema, DocumentFormValues } from './schema';
-import DOMPurify from 'dompurify';
-import { getCookie } from 'cookies-next';
-import Router from 'next/router';
-import Link from 'next/link';
+} from "@/components/ui/form";
+import { format } from "date-fns";
+import { CalendarIcon, Plus, Trash2 } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { useToast } from "@/hooks/use-toast";
+import { useForm, useFieldArray } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { documentFormSchema, DocumentFormValues } from "./schema";
+import DOMPurify from "dompurify";
+import { getCookie } from "cookies-next";
+import Router from "next/router";
+import Link from "next/link";
 
 // Temporary user constant
 const user = {
-  name: 'Azzam',
-  email: 'm.azzam.azis@gmail.com',
+  name: "Azzam",
+  email: "m.azzam.azis@gmail.com",
 };
 
 export const GenerateModule: React.FC = () => {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
-  const [htmlContent, setHtmlContent] = useState<string>('');
-  const [DSLink, setDSLink] = useState<string>('');
+  const [htmlContent, setHtmlContent] = useState<string>("");
+  const [DSLink, setDSLink] = useState<string>("");
 
   const getUser = async (token: string) => {
     try {
@@ -48,7 +48,7 @@ export const GenerateModule: React.FC = () => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        },
+        }
       );
       const responseJson = await response.json();
       console.log(responseJson);
@@ -58,15 +58,15 @@ export const GenerateModule: React.FC = () => {
       }
     } catch (err: any) {
       toast({
-        title: 'Please login again!',
+        title: "Please login again!",
         description: err.message,
-        variant: 'destructive',
+        variant: "destructive",
       });
     }
   };
 
   useEffect(() => {
-    const token = getCookie('AT');
+    const token = getCookie("AT");
     if (token) {
       getUser(token);
       console.log(token);
@@ -76,9 +76,9 @@ export const GenerateModule: React.FC = () => {
   // redirect to login if not logged in
   useEffect(() => {
     const checkLoggedIn = async () => {
-      const token = await getCookie('AT');
+      const token = await getCookie("AT");
       if (!token) {
-        Router.push('/login');
+        Router.push("/login");
       }
     };
 
@@ -88,20 +88,20 @@ export const GenerateModule: React.FC = () => {
   const onSubmit = async (data: DocumentFormValues) => {
     try {
       setIsLoading(true);
-      const token = await getCookie('AT');
+      const token = await getCookie("AT");
       if (!token) {
-        throw new Error('Unauthorized');
+        throw new Error("Unauthorized");
       }
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/generate/legal-document/`,
         {
-          method: 'POST',
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify(data),
-        },
+        }
       );
 
       const result = await response.json();
@@ -110,20 +110,20 @@ export const GenerateModule: React.FC = () => {
 
       // Sanitize the HTML content
       const sanitizedContent = DOMPurify.sanitize(result.generated_content)
-        .replace('```html', '')
-        .replace('```', '');
+        .replace("```html", "")
+        .replace("```", "");
       setHtmlContent(sanitizedContent);
       setDSLink(result.envelope_id);
 
       toast({
-        title: 'Success',
-        description: 'Document generated successfully',
+        title: "Success",
+        description: "Document generated successfully",
       });
     } catch (error) {
       toast({
-        title: 'Error',
+        title: "Error",
         description: `${error}`,
-        variant: 'destructive',
+        variant: "destructive",
       });
     } finally {
       setIsLoading(false);
@@ -133,11 +133,11 @@ export const GenerateModule: React.FC = () => {
   const form = useForm<DocumentFormValues>({
     resolver: zodResolver(documentFormSchema),
     defaultValues: {
-      title: 'Sample Agreement',
+      title: "Sample Agreement",
       date: new Date(),
       recipients: [{ name: user.name, email: user.email }],
-      description: 'This is a sample agreement description',
-      agreements: ['First agreement point'],
+      description: "This is a sample agreement description",
+      agreements: ["First agreement point"],
       closing: new Date(),
     },
   });
@@ -152,19 +152,18 @@ export const GenerateModule: React.FC = () => {
     fields: recipientFields,
     append: addRecipient,
     remove: removeRecipient,
-  } = useFieldArray<DocumentFormValues, 'recipients'>({
+  } = useFieldArray<DocumentFormValues, "recipients">({
     control: form.control,
-    name: 'recipients',
+    name: "recipients",
   });
 
   const {
     fields: agreementFields,
     append: addAgreement,
     remove: removeAgreement,
-    // @ts-ignore
-  } = useFieldArray<DocumentFormValues, 'agreements'>({
+  } = useFieldArray<DocumentFormValues, "agreements">({
     control: form.control,
-    name: 'agreements',
+    name: "agreements",
   });
 
   return (
@@ -204,13 +203,13 @@ export const GenerateModule: React.FC = () => {
                       <Button
                         variant="outline"
                         className={cn(
-                          'w-full justify-start text-left font-normal',
-                          !field.value && 'text-muted-foreground',
+                          "w-full justify-start text-left font-normal",
+                          !field.value && "text-muted-foreground"
                         )}
                       >
                         <CalendarIcon className="mr-2 h-4 w-4" />
                         {field.value ? (
-                          format(field.value, 'PPP')
+                          format(field.value, "PPP")
                         ) : (
                           <span>Select date</span>
                         )}
@@ -273,7 +272,7 @@ export const GenerateModule: React.FC = () => {
           ))}
           <Button
             type="button"
-            onClick={() => addRecipient({ name: '', email: '' })}
+            onClick={() => addRecipient({ name: "", email: "" })}
             className="w-full"
           >
             <Plus className="mr-2 h-4 w-4" /> Add Recipient
@@ -324,7 +323,7 @@ export const GenerateModule: React.FC = () => {
           ))}
           <Button
             type="button"
-            onClick={() => addAgreement('')}
+            onClick={() => addAgreement("")}
             className="w-full"
           >
             <Plus className="mr-2 h-4 w-4" /> Add Agreement
@@ -345,13 +344,13 @@ export const GenerateModule: React.FC = () => {
                       <Button
                         variant="outline"
                         className={cn(
-                          'w-full justify-start text-left font-normal',
-                          !field.value && 'text-muted-foreground',
+                          "w-full justify-start text-left font-normal",
+                          !field.value && "text-muted-foreground"
                         )}
                       >
                         <CalendarIcon className="mr-2 h-4 w-4" />
                         {field.value ? (
-                          format(field.value, 'PPP')
+                          format(field.value, "PPP")
                         ) : (
                           <span>Select closing date</span>
                         )}
@@ -398,7 +397,7 @@ export const GenerateModule: React.FC = () => {
                 Generating...
               </>
             ) : (
-              'Generate Document'
+              "Generate Document"
             )}
           </Button>
         </form>
