@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import { useAuthContext } from '@/components/context';
-import { deleteCookie } from 'cookies-next';
-import { LogInIcon, LogOutIcon, UserPenIcon } from 'lucide-react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { redirect, usePathname, useRouter } from 'next/navigation'; // Import usePathname
-import React, { useEffect, useState } from 'react';
+import { useAuthContext } from "@/components/context";
+import { deleteCookie } from "cookies-next";
+import { LogInIcon, LogOutIcon, UserPenIcon } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { redirect, usePathname, useRouter } from "next/navigation"; // Import usePathname
+import React, { useEffect, useState } from "react";
 
 export const Navbar: React.FC = () => {
   const [isScrolledToScreen, setIsScrolledToScreen] = useState(false);
@@ -16,14 +16,14 @@ export const Navbar: React.FC = () => {
   const { isAuthenticated, setIsAuthenticated } = useAuthContext();
 
   const logout = () => {
-    deleteCookie('AT');
+    deleteCookie("AT");
     setIsAuthenticated(false);
-    router.push('/');
+    router.push("/");
   };
 
   const login = async () => {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/auth/code_grant_auth`,
+      `${process.env.NEXT_PUBLIC_API_URL}/auth/code_grant_auth`
     );
     const responseJson = await response.json();
     window.location.href = responseJson.url;
@@ -38,20 +38,20 @@ export const Navbar: React.FC = () => {
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
 
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
-  if (pathname === '/login' || pathname === '/register') {
+  if (pathname === "/login" || pathname === "/register") {
     return (
       <nav className="w-screen absolute h-16 p-2 flex justify-center bg-white drop-shadow-md">
-        <Link href={'/'}>
+        <Link href={"/"}>
           <div className="relative h-full aspect-square">
             <Image
-              src={'/logo-no-background.png'}
+              src={"/logo-no-background.png"}
               fill
               className="object-contain"
               alt="Logo"
@@ -66,11 +66,11 @@ export const Navbar: React.FC = () => {
     <nav
       className={`fixed z-50 w-full py-4 transition-colors duration-300 overflow-hidden  ${
         // isScrolledToScreen && pathname=="/" ? 'bg-[#0F172A] shadow-md' : 'bg-transparent'
-        pathname == '/'
+        pathname == "/"
           ? isScrolledToScreen
-            ? 'bg-[#0F172A] shadow-md'
-            : 'bg-transparent'
-          : 'bg-[#0F172A] shadow-md'
+            ? "bg-[#0F172A] shadow-md"
+            : "bg-transparent"
+          : "bg-[#0F172A] shadow-md"
       }`}
     >
       {isScrolledToScreen && (
@@ -79,11 +79,11 @@ export const Navbar: React.FC = () => {
       <div className="container px-4 mx-auto flex justify-between relative">
         <div
           className="flex items-center gap-4 cursor-pointer"
-          onClick={() => router.push('/')}
+          onClick={() => router.push("/")}
         >
           <div className="relative w-10 aspect-square">
             <Image
-              src={'/logo-no-background.png'}
+              src={"/logo-no-background.png"}
               alt="Logo"
               fill
               className="object-contain"
@@ -97,9 +97,9 @@ export const Navbar: React.FC = () => {
           {/* <Link href={'/'}>Home</Link> */}
           {isAuthenticated && (
             <>
-              <Link href={'/generate'}>Generate Document</Link>
-              <Link href={'/dashboard'}>Dashboard</Link>
-              <Link href={'/contact'}>Contact</Link>
+              <Link href={"/generate"}>Generate Document</Link>
+              <Link href={"/dashboard"}>Dashboard</Link>
+              <Link href={"/chatbot"}>Chatbot</Link>
             </>
           )}
         </div>
