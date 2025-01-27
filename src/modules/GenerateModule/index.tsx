@@ -38,7 +38,6 @@ export const GenerateModule: React.FC = () => {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [htmlContent, setHtmlContent] = useState<string>("");
-  const [DSLink, setDSLink] = useState<string>("");
 
   const getUser = async (token: string) => {
     try {
@@ -113,7 +112,6 @@ export const GenerateModule: React.FC = () => {
         .replace("```html", "")
         .replace("```", "");
       setHtmlContent(sanitizedContent);
-      setDSLink(result.envelope_id);
 
       toast({
         title: "Success",
@@ -417,12 +415,6 @@ export const GenerateModule: React.FC = () => {
                 className="document-preview p-2"
                 dangerouslySetInnerHTML={{ __html: htmlContent }}
               />
-              <Link
-                href={`https://demo.docusign.net/restapi/envelopes/${DSLink}`}
-                target="_blank"
-              >
-                Link to open document editor
-              </Link>
             </>
           ) : (
             <p className="text-gray-500">Generated document will appear here</p>
