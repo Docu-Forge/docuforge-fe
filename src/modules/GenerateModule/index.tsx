@@ -409,7 +409,11 @@ export const GenerateModule: React.FC = () => {
             )}
           />
 
-          <Button type="submit" className="w-full" disabled={isLoading}>
+          <Button
+            type="submit"
+            className="w-full bg-blue-700 hover:bg-blue-800"
+            disabled={isLoading}
+          >
             {isLoading ? (
               <>
                 <svg
