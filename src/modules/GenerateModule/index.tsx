@@ -27,6 +27,13 @@ import DOMPurify from "dompurify";
 import { getCookie } from "cookies-next";
 import Router from "next/router";
 import Link from "next/link";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 // Temporary user constant
 const user = {
@@ -133,6 +140,7 @@ export const GenerateModule: React.FC = () => {
     defaultValues: {
       title: "Sample Agreement",
       date: new Date(),
+      document_type: "Cooperation Letter",
       recipients: [{ name: user.name, email: user.email }],
       description: "This is a sample agreement description",
       agreements: ["First agreement point"],
@@ -222,6 +230,38 @@ export const GenerateModule: React.FC = () => {
                       />
                     </PopoverContent>
                   </Popover>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          {/* Document Type Field */}
+          <FormField
+            control={control}
+            name="document_type"
+            render={({ field }) => (
+              <FormItem>
+                <label className="block text-sm font-medium">
+                  Document Type
+                </label>
+                <FormControl>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Document type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Cooperation Letter">
+                        Cooperation Letter
+                      </SelectItem>
+                      <SelectItem value="Employment Agreement">
+                        Employment Agreement
+                      </SelectItem>
+                      <SelectItem value="Request/Sales Letter">
+                        Request/Sales Letter
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
                 </FormControl>
                 <FormMessage />
               </FormItem>
