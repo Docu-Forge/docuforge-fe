@@ -2,6 +2,7 @@ import { ChatbotModule } from '@/modules/ChatbotModule';
 import { User } from '@/types/User';
 import { getCookie } from 'cookies-next';
 import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 export default async function ChatBot() {
     const token = getCookie('AT', { cookies });
   
@@ -16,6 +17,8 @@ export default async function ChatBot() {
     );
     const responseJson = await response.json();
     const user = responseJson.contents as User;
-    console.log(responseJson);
+    if (!responseJson.contents) {
+        redirect('/');
+    }
     return <ChatbotModule user={user}/>;
 }
