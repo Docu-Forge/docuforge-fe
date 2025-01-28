@@ -1,5 +1,5 @@
 export const DEMO_VIDEO_LINK =
-  'https://www.youtube.com/embed/D0UnqGm_miA?si=ssydGDDyTjMlvSL_';
+  'https://www.youtube.com/embed/sKK68Q_qRYY?si=ULR3__MZprsvAY_V';
 
 export const FEATURES_LIST = [
   {
